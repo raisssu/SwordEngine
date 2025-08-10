@@ -1,6 +1,9 @@
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
-#include </Programming/SwordEngine/SwordEngine/shader_s.h>
+
+#include "stb_image.h"
+#include "shader_s.h"
+
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -42,17 +45,18 @@ int main() {
     Shader ourShader("E:/Programming/SwordEngine/SwordEngine/Shaders/vertex_shader.vert", "E:/Programming/SwordEngine/SwordEngine/Shaders/fragment_shader.frag");
     //vertex input
     float vertices[] = {
-        // position          // colors
-         0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,//top right
-         0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,//bottom right
-        -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,//top left
-        -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,//bottom left
+        // position          // colors          // texture coords
+         0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,  //top right
+         0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,//bottom right
+        -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,//top left
+        -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,//bottom left
     };
 
     unsigned int indices[] = {
         0, 1, 2, // first triangle
         2, 3, 1  //second
     };
+
 
     unsigned int VBO, VAO, EBO;
     glGenBuffers(1, &VBO);
@@ -68,11 +72,15 @@ int main() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     //vertex attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     //color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    //texture attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     //wireframe 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -82,7 +90,33 @@ int main() {
     std::cout << "Max attribs: " << nrAttribs << std::endl;
 
 
-    
+
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    //texture wrap
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+    //texture filter
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load("Textures/container.jpg", &width, &height, &nrChannels, 0);
+
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    else {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+
+    stbi_image_free(data);
+
     //render loop
     while (!glfwWindowShouldClose(window)) {
 
@@ -92,6 +126,8 @@ int main() {
         //render
         glClearColor(191.f/255.f, 170.f/255.f, 170.f / 255.f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         //activate shader
         ourShader.use();

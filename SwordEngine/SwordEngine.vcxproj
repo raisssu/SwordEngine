@@ -148,14 +148,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="win32_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shader_s.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\fragment_shader.frag" />
     <None Include="Shaders\vertex_shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SwordEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
