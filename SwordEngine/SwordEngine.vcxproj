@@ -152,12 +152,19 @@
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="shader_s.h" />
+    <ClInclude Include="shader_s.h">
+      <FileType>CppHeader</FileType>
+    </ClInclude>
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="light.vert" />
     <None Include="Shaders\fragment_shader.frag" />
+    <None Include="Shaders\light.frag" />
+    <None Include="Shaders\lightSource.frag" />
+    <None Include="Shaders\lightSource.vert" />
     <None Include="Shaders\vertex_shader.vert" />
   </ItemGroup>
   <ItemGroup>
