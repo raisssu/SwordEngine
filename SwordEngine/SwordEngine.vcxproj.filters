@@ -52,6 +52,7 @@
     <None Include="Shaders\light.frag" />
     <None Include="Shaders\lightSource.frag" />
     <None Include="Shaders\lightSource.vert" />
+    <None Include="Shaders\light.vert" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SwordEngine.rc">

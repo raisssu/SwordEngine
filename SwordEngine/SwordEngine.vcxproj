@@ -163,6 +163,7 @@
     <None Include="light.vert" />
     <None Include="Shaders\fragment_shader.frag" />
     <None Include="Shaders\light.frag" />
+    <None Include="Shaders\light.vert" />
     <None Include="Shaders\lightSource.frag" />
     <None Include="Shaders\lightSource.vert" />
     <None Include="Shaders\vertex_shader.vert" />
